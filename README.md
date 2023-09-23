@@ -40,7 +40,7 @@ The board is also listed on OshPark as well. **Be sure to get them in 0.8mm thic
 
 ## Board Configurations
 
-The board comes with seven sets of jumper pads for solder bridges. SJ1, SJ2, SJ3, and SJ4 require you to solder bridge the middle pad either to the left or right pads. SJ7 is configured by either leaving the pads unsoldered or bridging them with solder. Here are the situations where you need to add solder bridges.
+The board comes with five sets of jumper pads for solder bridges. SJ1, SJ2, SJ3, and SJ4 require you to solder bridge the middle pad either to the left or right pads. SJ7 is configured by either leaving the pads unsoldered or bridging them with solder. Here are the situations where you need to add solder bridges.
 
 ### SRAM Size Selection (SJ1 and SJ2)
 
