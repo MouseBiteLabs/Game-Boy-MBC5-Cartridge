@@ -40,7 +40,7 @@ The board is also listed on OshPark as well. **Be sure to get them in 0.8mm thic
 
 ## Board Configurations
 
-The board comes with seven sets of jumper pads for solder bridges. SJ1, SJ2, SJ3, and SJ4 require you to solder bridge the middle pad either to the top or bottom pads, or left or right pads. SJ7 is configured by either leaving the pads unsoldered or bridging them with solder. Here are the situations where you need to add solder bridges.
+The board comes with seven sets of jumper pads for solder bridges. SJ1, SJ2, SJ3, and SJ4 require you to solder bridge the middle pad either to the left or right pads. SJ7 is configured by either leaving the pads unsoldered or bridging them with solder. Here are the situations where you need to add solder bridges.
 
 ### SRAM Size Selection (SJ1 and SJ2)
 
@@ -48,6 +48,7 @@ These jumpers are located underneath the MBC5 chip, and labeled "64K" and "256K/
 
 - If the game you're making uses 256Kb or more of SRAM, then solder the middle pads of the two jumper sets to the right pads.
 - If the game you're making uses 64Kb of SRAM, then solder the middle pads of the two jumper sets to the left pads.
+- If you are making a multicart, solder the pads according to the larger size of the SRAM between the two games (if one game uses 256Kb and the other uses 64Kb, set the jumpers to 256Kb). The max size of SRAM in multicart mode is 512Kb per game.
 - SJ1 and SJ2 must be soldered in the same direction.
 
 Note that you can make games that only require 64Kb of RAM and still use a 256Kb or 1Mb SRAM chip. You still need to configure the jumpers to the 64Kb setting, though.
@@ -60,7 +61,7 @@ Solder the middle pads of SJ3 and SJ4 to the left (towards "SINGLE") for single 
 
 ### Multicart Programming Jumper (SJ7)
 
-When you program a multicart, you must append the second game ROM to the first game ROM file, and *then* program with the GBxCart. It must be programmed in one step. When you are program your multicart, SJ7 must be **UNSOLDERED** to program correctly. After your multicart has been programmed, bridge SJ7 with solder to enable the multicart functionality.
+When you program a multicart, you must append the second game ROM file to the first game ROM file, and *then* program with the GBxCart. It must be programmed in one step. When you are program your multicart, SJ7 must be **UNSOLDERED** to program correctly. After your multicart has been programmed, bridge SJ7 with solder to enable the multicart functionality.
 
 ## Bill of Materials (BOM)
 
