@@ -138,7 +138,7 @@ Please carefully review the parts you need for the board you are trying to make.
 
 ### v1.2
 - Replaced non-donor battery management circuitry with a TPS3613-based circuit for smaller BOM and easier routing
-- 
+  
 ### v1.1
 - Moved all parts on the top down to allow for compatibility with DMG-style shells
 - Rotated battery for more space
