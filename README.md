@@ -5,9 +5,9 @@ This is my design of a flashable MBC5-based cartridge for the Game Boy. The MBC5
 This circuit board should cover most, if not all, MBC5 games. The features are as follows:
 
 - Able to make games up to 32 Mb in size, that use up to 1024 Kb of RAM
+- Compatibility with all four of the major Game Boy battery management ICs - MM1026, MM1134, BA6129, and BA6735
 - The option to add battery backup to the cartridge *without* the need of the original battery management ICs - perfect for MBC5 donors that didn't have batteries in them
 - Fully compatible with the <a href="https://www.gbxcart.com/">GBxCart RW</a> so you can transfer games and save files to and from the board
-- An option for making a multicart with completely separate areas of RAM between games that is triggered by resetting the console or power cycling
 
 [image of board scan]
 [image of assembled board]
@@ -18,6 +18,10 @@ All gerbers and source files can be found in this repo, as this project is fully
 
 I am not responsible for any damage you do to your self or your property. I do not guarantee design compatibility. You may encounter issues with certain games! Attempt this project at your own risk.
 
+If you are using this board to make games other than for personal use, **you must have permission from the originator to use and distribute any ROM images or other related material.** You are responsible for making sure you adhere to any license requirements. DO NOT use my circuit boards for profiting from stolen work - this especially includes homebrew content, ROM hacks, and using fan-made labels without permission from the originator.
+
+**Please note that version 1.3 is technically untested, however, the only consequential change is an additional 0.25 mm on the bottom of the board edge for better fitment, so I don't expect issues.**
+
 ## Board Characteristics and Order Information
 
 The zipped folder contains all the gerber files for this board. The following options **must** be chosen when ordering boards for yourself.
@@ -26,46 +30,70 @@ The zipped folder contains all the gerber files for this board. The following op
 - Surface Finish: ENIG
 - Gold Fingers: Yes, 30° chamfer
 
-**I sell this board on Etsy, so you don't have to buy multiples from board fabricators:**
+**Currently not selling on Etsy, but will in the future. Stay tuned.**
+
+<a href="https://www.etsy.com/shop/MouseBiteLabs"><img src="https://github-production-user-asset-6210df.s3.amazonaws.com/97127539/239718536-5c9aefe3-0628-4434-b8d8-55ff80ac3bbc.png" alt="PCB from Etsy" /></a> 
+
+You can use the zipped folder at any board fabricator you like. You may also buy the board from PCBWay using this link (disclosure: I receive 10% of the sale value to go towards future PCB orders of my own):
 
 [link]
 
-You can alternatively use the zipped folder at any board fabricator you like. You may also buy the board from PCBWay using this link (disclosure: I receive 10% of the sale value to go twoards future PCB orders of my own):
+<a href="https://oshpark.com/shared_projects/">The board is also listed on OSH Park as well.</a> **Be sure to get them in 0.8mm thickness if you order from here.**
 
-[link]
+## Required Equipment
 
-The board is also listed on OshPark as well. **Be sure to get them in 0.8mm thickness if you order from here.**
+The EEPROMs on the board needs to be programmed somehow. I recommend using the GBxCart, as mentioned. These boards are fully compatible with it, and it makes reflashing games extremely easy using <a href="https://github.com/lesserkuma/FlashGBX">lesserkuma's FlashGBX software</a>.
 
-[link]
+Alternatively, you can buy an EEPROM programmer with a TSOP adapter. The downside to this method is that you have to desolder the chip every time you want to program it. The <a href="https://flashcatusb.com/">FlashcatUSB</a> is one popular option in retro spaces.
+
+## Battery Safety
+
+When assembling a board, I recommend populating all the parts *except* the battery, and getting it to run initially without it. This is to make it easier to fix any solder connections that might need fixing, without having to worry about getting the battery hot. And if you need to rework anything near the battery after you've put it on the board, be safe and remove it before putting a hot soldering iron next to it.
+
+And this should go without saying, but if you're assembling these boards with a hot plate or hot air, *do not* solder the battery on this way. You should use an iron, and keep heat off of the battery as much as possible. 
+
+(Also check polarity!)
 
 ## Board Configurations
 
 The board comes with five sets of jumper pads for solder bridges. SJ1, SJ2, SJ3, and SJ4 require you to solder bridge the middle pad either to the left or right pads. SJ7 is configured by either leaving the pads unsoldered or bridging them with solder. Here are the situations where you need to add solder bridges.
 
-### SRAM Size Selection (SJ1 and SJ2)
+### SRAM Size Selection (SJ1 and SJ2, or SW1)
 
 These jumpers are located underneath the MBC5 chip, and labeled "64K" and "256K/1M". Solder them to configure the amount of RAM your cart uses. You must configure these pads for every game you make, unless you do not need RAM. <a href="https://catskull.net/gb-rom-database/">You can find a list of games here with their respective RAM sizes.</a>
 
 - If the game you're making uses 256Kb or more of SRAM, then solder the middle pads of the two jumper sets to the right pads.
 - If the game you're making uses 64Kb of SRAM, then solder the middle pads of the two jumper sets to the left pads.
-- If you are making a multicart, solder the pads according to the larger size of the SRAM between the two games (if one game uses 256Kb and the other uses 64Kb, set the jumpers to 256Kb). The max size of SRAM in multicart mode is 512Kb per game.
 - SJ1 and SJ2 must be soldered in the same direction.
+- The footprint of these selection pads should allow for a DPDT switch, part number CAS-220A1, to be placed on these pads instead of having to bridge the pads with solder.
+
+[image of solder jumpers]
 
 Note that you can make games that only require 64Kb of RAM and still use a 256Kb or 1Mb SRAM chip. You still need to configure the jumpers to the 64Kb setting, though.
 
-**I recommend using 64Kb or 256Kb RAM chips, unless you need 1Mb for the game you are making or are making a multicart (you need to use 1Mb RAM for multicarts).**
+**I recommend using 64Kb or 256Kb RAM chips, unless you absolutely need 1Mb for the game you are making.**
 
-### Multicart Jumpers (SJ3 and SJ4)
+### Using an MM1134 or BA6735 for U4 (SJ3)
 
-Solder the middle pads of SJ3 and SJ4 to the left (towards "SINGLE") for single games, and solder them to the right (towards "MULTI") for multicarts. You must have these pads soldered in one direction or the other for every game you make!
+Bridge the jumper SJ3 if you have either an MM1134 or BA6735 for U4, specifically. Any other battery management IC must leave SJ3 unsoldered.
 
-### Multicart Programming Jumper (SJ7)
+## Test Points and Final Checkout
 
-When you program a multicart, you must append the second game ROM file to the first game ROM file, and *then* program with the GBxCart. It must be programmed in one step. When you are program your multicart, SJ7 must be **UNSOLDERED** to program correctly. After your multicart has been programmed, bridge SJ7 with solder to enable the multicart functionality.
+On the back of the board are five test points. Here's where they are connected:
 
-## Bill of Materials (BOM)
+- TP1: SRAM supply voltage
+- TP2: Battery voltage (after R1)
+- TP3: Battery voltage (positive terminal of battery)
+- TP4: Ground
+- TP5: VCC input voltage
 
-Your parts list will vary depending on the game you are trying to make, and what chips you have for the battery management (if any). Note that C8 - C10 footprints are only included for edge cases that may require them; you can ignore them unless you run into issues.
+After you assemble your game, you should measure the current out of the battery. But first, you should program it with the GBxCart, or if you programmed the EEPROM separately, put it into a Game Boy and cycle power once. Then, flip the PCB upside down on a non-conductive surface (not your leg), and set your multimeter in DC millivolts (or volts). Put the positive probe on TP3 and the negative probe on TP2. If you used a 10kΩ for R1, as indicated in the BOM, you should read a voltage in the single of millivolts. If you have something much higher, especially voltages above 10mV, then you likely have an issue or short circuit on the board somewhere.
+
+**Note: If using the replacement battery management IC in U5, you need to power up the game at least once before battery currents will make sense.**
+
+## Bill of Materials (BOM) - UPDATE
+
+Your parts list will vary depending on the game you are trying to make, and what chips you have for the battery management (if any). Note that C9 - C11 footprints are only included for edge cases that may require them; you can ignore them unless you run into issues.
 
 Please carefully review the parts you need for the board you are trying to make. Do not add any parts to your build that don't appear in the column for the game you are making. This means you *cannot* populate every component on the board at the same time.
 
@@ -78,9 +106,6 @@ Please carefully review the parts you need for the board you are trying to make.
 | C4                    | 0.1uF                         | 0603             | Capacitor (MLCC)   |               | X                  | X                     | [https://mou.sr/3ENc15O](https://mou.sr/3ENc15O) |
 | C6                    | 0.1uF                         | 0603             | Capacitor (MLCC)   |               | X                  | X                     | [https://mou.sr/3ENc15O](https://mou.sr/3ENc15O) |
 | C7                    | 0.1uF                         | 0603             | Capacitor (MLCC)   |               |                    | X                     | [https://mou.sr/3ENc15O](https://mou.sr/3ENc15O) |
-| C8                    | 0.001uF                       | 0603             | Capacitor (MLCC)   |               |                    |                       | [https://mou.sr/3PpAXoM](https://mou.sr/3PpAXoM) |
-| C9                    | 0.001uF                       | 0603             | Capacitor (MLCC)   |               |                    |                       | [https://mou.sr/3PpAXoM](https://mou.sr/3PpAXoM) |
-| C10                   | 0.001uF                       | 0603             | Capacitor (MLCC)   |               |                    |                       | [https://mou.sr/3PpAXoM](https://mou.sr/3PpAXoM) |
 | Q1                    | Si2301CDS                     | SOT-23           | P-Channel FET      |               |                    | X                     | [https://mou.sr/3LvBdSb](https://mou.sr/3LvBdSb) |
 | Q2                    | MMBT3904                      | SOT-23           | NPN BJT            |               |                    | X                     | [https://mou.sr/3Rv7yfA](https://mou.sr/3Rv7yfA) |
 | R1                    | 10k                           | 0603             | Resistor           |               | X                  | X                     | [https://mou.sr/3riR7IH](https://mou.sr/3riR7IH) |
@@ -97,15 +122,30 @@ Please carefully review the parts you need for the board you are trying to make.
 
 ## Things to Remember
 
-- The footprint for the EEPROM is specifically for 29F016 - it has 48 pins. However, 29F032 and 29F033 are only 40 pin devices. They still work fine on the board though - place them in the center of the footprint, and leave the outer two pins on each corner empty.
-- The 29F016, 29F032, and 29F033 have been known to occasionally be defective upon arrival. They're usually only available from AliExpress.
-- For battery management, use either U4 *or* U5 and U6 and supporting components. **Do not** use U4, U5, and U6 all on one board. They will interfere with each other.
-- There is not compatibility with MM1026 or BA6129 battery management ICs on this cartridge. You cannot use these for U4. This is not a huge deal, because as far as I can tell from the <a href="https://gbhwdb.gekkio.fi/cartridges/mbc5.html">gbhwdb</a>, no MBC5 games ever used these chips in the first place, so any MBC5 donors with batteries should have the MM1134/BA6735 as it is.
+- The footprint for the EEPROM is specifically for 29F016 - it has 48 pins. However, 29F032 and 29F033 are only 40 pin devices. They still work fine on the board though - place them in the center of the footprint, and leave the outer two pins on each corner empty
+- The 29F016, 29F032, and 29F033 have been known to occasionally be defective upon arrival. They're either used, or new old stock, and usually only available from AliExpress.
+- The footprint for the battery can fit a CR2032, CR2025, or CR2016 with solder tabs. The only difference is the mAh capacity (larger number = longer life). If you get Panasonic tabbed batteries, you may have to trim the battery tabs to make them fit on the footprint.
+  - For untabbed coin cells, you can find battery retainer adapters online, <a href="https://retrogamerepairshop.com/products/hdr-game-boy-game-battery-retainer?variant=40511013290156">like this one.</a>
+- For battery management, use either U4 *or* U5 and supporting components. **Do not** use U4 and U5 simultaneously on one board. They will interfere with each other.
 - Kb is kilo**bits** and Mb is mega**bits**. Sometimes you will find game ROM and RAM sizes defined in terms of KB or kilo**bytes** and MB or mega**bytes**. You can convert Kb and Mb to KB and MB by dividing Kb or Mb by 8. For example, 256 Kb = 32 KB.
 - You only need to provide ROM and RAM chips that have at least *or greater* the size of the game you are trying to make. That means you can use a 256Kb SRAM chip for a game that only requires 64Kb!
-- If you are using a 64Kb or 256Kb RAM chip, it will be 28 pins. The footprint for the SRAM is 32 pins to accomodate the 1Mb RAM chips. If you are using a 28-pin device, then populate them so that the package sits at the bottom of the footprint and leave the top four pins (two on either side) empty.
 
 ## Revision History
+
+### v1.3
+- Extended cart edge down by 0.25 mm for better fitment
+- Added OSHW logo and "SUPPORT ORIGINAL CREATORS!"
+
+### v1.2
+- Replaced non-donor battery management circuitry with a TPS3613-based circuit for smaller BOM and easier routing
+- 
+### v1.1
+- Moved all parts on the top down to allow for compatibility with DMG-style shells
+- Rotated battery for more space
+- Widen SRAM footprint for easier soldering
+- Renamed some reference designators for consistency between designs
+- Changed silkscreen for clarity
+- Removed multicart option
 
 ### v1.0
 - Release revision
