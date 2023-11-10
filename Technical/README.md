@@ -6,38 +6,31 @@ Please correct me on any information I may have gotten wrong.
 
 ## Schematic
 
-![image](https://github.com/MouseBiteLabs/Game-Boy-MBC1-Cartridge/assets/97127539/371b160b-005a-4995-b2d4-85e91957d703)
+![image](https://github.com/MouseBiteLabs/Game-Boy-MBC5-Cartridge/assets/97127539/06a5fa1e-97e7-4bd4-8fff-14995a18a9aa)
 
 ## Cart Edge Pins
 
 Very briefly, I will categorize the different pins on the 32-pin cartridge edge connector.
 
 - Pin 1 and pin 32 are VCC and GND, respectively.
-- Pin 2 is the CLK or PHI pin. These are not used on the MBC1 cartridge.
+- Pin 2 is the CLK or PHI pin. THis is not used on the MBC5 cartridge.
 - Pin 3 is the /WR pin, pin 4 is the /RD pin, pin 5 is the /CS pin. These signals partially determine when data is read from the ROM or when data is read/written to the RAM.
 - Pins 6 through 21 are the address pins A0 through A15.
 - Pins 22 through 29 are the data pins D0 through D7.
 - Pin 30 is the /RST (or reset) pin. When this pin is low, the Game Boy will cease operation.
 - Pin 31 is a generally unused pin in Game Boy cartridges, but here it is connected to the EEPROM's /WE pin for compatibility with the GBxCART RW.
 
-## MBC1 - Memory Bank Controller
+## MBC5 - Memory Bank Controller
 
-The MBC1 is a pretty simplistic memory mapping chip. I won't go into detail how it operates, because you can find sufficient explanations from <a href="https://wiki.tauwasser.eu/view/MBC1">Tauwasser's website</a>, among others. A high level explanation is that it is used to expand the addressable memory of a Game Boy cartridge. The RA14-RA18 and AA13-AA14 outputs are used to access higher memory banks on the ROM and RAM chips. It also has ROM and RAM chip select outputs to control data access on the ROM and RAM chips, though only the RAM /CS output is commonly used.
+The MBC5 is one of the most popular mappers for Game Boy Color cartridges, and *greatly* expands the accesible space of a Game Boy cartridge. I won't go into detail how it operates, because you can find sufficient explanations on memory mappers elsewhere, and it doesn't have any extraneous features like MBC3's real-time clock. It's a pretty straightforward device by just looking at the pinout. A high level explanation is that it is used to expand the addressable memory of a Game Boy cartridge. The RA14-RA22 and AA13-AA16 outputs are used to access higher memory banks on the ROM and RAM chips.
 
-Further sections will provide more context for some of the MBC1 pins and the logic of how they are connected.
+Further sections will provide more context for some of the other MBC5 pins and the logic behind how they are connected.
 
 ## ROM and RAM
 
-The connections to the address and data pins here are mostly self-explanatory. However, the upper address pins are controlled by the MBC1.
-- A14 through A18 on the ROM chip are controlled by the RA14 to RA18 outputs from the MBC1.
-- A19 and A20 on the ROM, and A13 and A14 on the RAM, are both controlled by the MBC1's output pins 6 and 7 - but you can only select one set of pins, not both!
-  - This means you can use the MBC1 for games with 4Mb of ROM space and 256Kb of RAM space, *or* 16Mb of ROM space and 64Kb of RAM space. On my cart, this is selected with SJ1 and SJ2.
-  - R3 through R6 on my cart are pull-down resistors for asserting the unused set of two pins to known states to prevent unwanted behavior.
-    - In 64K SRAM mode: R3 will pull pin 26 on the SRAM to the CS_OUT pin (which connects to the MM chip CS output pin or the /RESET output pin of TPS3613). On 64K SRAM chips, this is the CE2 pin, and it's normally wired this way on regular carts for low-power data retention mode. If you use a 256K SRAM chip instead, then this is the A13 address pin, and will go unused if using it in 64K mode.
-    - In 64K SRAM mode: R4 will pull pin 1 on the SRAM to GND. This is NC on 64K SRAM chips, and A14 on 256K SRAM chips which will be unused in 64K mode.
-    - In 256K SRAM mode: R5 and R6 will pull the upper unused address pins of the EEPROM to GND.
-
-![image](https://github.com/MouseBiteLabs/Game-Boy-MBC1-Cartridge/assets/97127539/928e7bcc-cdb0-44dd-8cb8-78eb2b47fd5e)
+The connections to the address and data pins here are mostly self-explanatory. However, the upper address pins are controlled by the MBC5.
+- A14 through A21 on the ROM chip are controlled by the RA14 to RA21 outputs from the MBC5. On my cart, the RA22 output doesn't go anywhere. This would be used for expanding the ROM space from 32 Mbit to the max size of 64 Mbit, but barely any games use this much space. The only board I could find that actually supports it is <a href="https://gbhwdb.gekkio.fi/cartridges/CGB-B82J-0/gekkio-1.html">DMG-A15-10</a>.
+- A13 to A16 on the SRAM chip are controlled by the AA13 to AA16 outputs from the MBC5. This means you can address up to a whole 1024 Kbit of SRAM! The max SRAM size wasn't used on too many games, but it does include Game Boy Wars 3 (Advance Wars series), so it felt worthy of inclusion.
 
 Other pins include: 
 
@@ -59,7 +52,7 @@ Ensuring current coming out of the battery is as minimal as possible while the G
 
 4) Operation while the voltage is ramping down after turning off the power switch must be restricted to prevent junk data from being written to cartridge RAM.
 
-Original MBC1 carts manage all of this with U4, which was typically MM1026 or the equivalent BA6129. The MM1134 or the equivalent BA6375 can also be used. I'll go over the functional requirements here, and for convenience, I'll be using the MM numbers when talking about them.
+Original MBC5 carts manage all of this with U4, which was (as far as I can tell) exclusively the MM1134 or BA6375. But with this board, you can also use battery management ICs MM1026 and BA6129, which were used on MBC1 and MBC3 carts. I'll go over the functional requirements here, and for convenience, I'll be using the MM numbers when talking about them.
 
 ### SRAM Operational Background
 
@@ -73,11 +66,11 @@ The big differences are the number of address pins and the number of chip enable
 
 For 64K, /CE needs to be at VCC, *or* CE2 needs to be at GND for the current to be minimized. For 256K, /CE needs to be at VCC, full stop (in this case, VCC is whatever voltage appears on the SRAM's VCC pin, so when power is off that's the battery voltage). That's not super convenient if the power is off - something needs to make the /CE pin go to VCC, which means whatever that something is better not be pulling a lot of current, lest we lower our battery life.
 
-On original MBC1 cartridges, games that have 64K SRAM used the MBC1 for controlling the /CE pin for data access, and U4 (MM1026) for keeping CE2 at GND when power was off. But for 256K SRAM, that CE2 pin wasn't available anymore. Instead, if a cartridge had an MM1026 chip for battery management, the MBC1 was powered via of the battery as well, and had internal logic to keep /CE logic high when disabled. The MM1026 has a /CE output as well that will pull the output up to the battery voltage, however it *does not* have a way to allow the /CE pin to be accessed during normal gameplay. So the MBC1 needs to take care of both functions, but since it's powered from the battery when power is off, that means the battery life would be impacted. I don't know how much current the MBC1 pulls from the battery for games that had 256K SRAM, but I imagine it probably wasn't a whole lot - I would still expect 64K SRAM games to last longer though.
+*If you use a 256 Kbit SRAM chip, but solder the jumpers on my board for 64 Kbit, the CE2 pin on the 64 Kbit RAM chip will be continuously enabled by setting it high. And for 1024 Kbit SRAM, there's an extra four pins to expand the memory space, and it also restores the CE2 pin that the 64 Kbit SRAM has. For easy implementation, my boards still only use the /CE pin for data access and retention, and keeps the new CE2 pin continuously enabled.*
 
-*Wouldn't it be great if there was some version of this MM chip that utilized some kind of function that combined regular access of the 256K SRAM's /CE pin but also keep it pulled up to battery voltage when power was shut off for low data retention currents without having to power the MBC1 on the battery as well? ..... Foreshadowing is a literary device in whi ---*
+Games that have 64K SRAM can use the MBC5 for controlling the /CE pin for data access, and U4 (the MM chips) for keeping CE2 at GND when power was off. But for 256K SRAM, that CE2 pin isn't available anymore. As an example - for MBC1 games, if a cartridge had an MM1026 chip for battery management, the MBC1 was powered via of the battery as well, and had internal logic to keep /CE logic high when disabled. The MM1026 has a /CE output as well that will pull the output up to the battery voltage, however it *does not* have a way to allow the /CE pin to be accessed during normal gameplay. So the MBC1 needs to take care of both functions, but since it's powered from the battery when power is off, that means the battery life would be impacted. 
 
-On my custom MBC1 board, I implement a method of accessing the RAM /CE pin *and* keeping it in a low power state, without needing the MBC1 to be powered by the battery. This can be done with just an MM1134, an MM1026 and extra parts, or completely new off-the-shelf components without the need for a donor. But before covering that, let's talk about the other important part of the battery backup system - how to properly and safely manage shifting between console power to battery power.
+Luckily, the /CE pin on 256K SRAM chips can be managed completely by the MM1134. And all MBC5 games used this chip, if it had battery-backed RAM. The MM1026 wasn't used at all. Using the MM1134 removed the requirement of keeping the MBC5 powered while the cartridge was off, if using larger than 64K RAM. Handy! But on my custom carts, I add in an extra bit of circuitry to allow you to do this with just an MM1026, or completely new off-the-shelf components without the need for a donor - just in case you have an MBC5 donor that doesn't have RAM on it. But before covering that, let's talk about the other important part of the battery backup system - how to properly and safely manage shifting between console power to battery power.
 
 ### Reset IC - MM1026
 
@@ -89,19 +82,17 @@ In order to prevent this, cartridges that have battery-backed SRAM on them use t
 
 ![image](https://github.com/MouseBiteLabs/Game-Boy-MBC1-Cartridge/assets/97127539/c3d14c7a-4695-4fc1-92df-16f425d90c79)
 
-But that's not all the MM chip does. It also is used to pull the MBC1's /RESET input to GND as well. This is especially important for original Game Boy MBC1 carts with 256K SRAM that needed the MBC1 to be powered from the battery, as keeping this pin off will (assumedly) keep current draw of the MBC1 to a minimum. Furthermore, pulling this pin to GND also causes the MBC1 to assert the SRAM's /CE pin high to keep the SRAM in a low power state.
+It is also used to pull the memory mapper's /RESET input to GND as well. This is more important on boards that powered their MBC chips off of the battery (particularly MBC3) as it greatly reduces power consumption, but it also further prevents any junk data from being written to the SRAM during power-down.
 
 ### Reset IC - MM1134
 
-The MM1134 is nearly identical to the MM1026, with one distinct difference. There is one extra input that was previously an unconnected pin on the MM1026 - the /Y input. This input is intended to be used with a RAM /CE signal. It controls the /CS output (pin 5) on the MM1134. See the schematic and timing diagram below:
+The MM1134 is nearly identical to the MM1026, with one distinct difference that's crucial for OEM MBC5 games. There is one extra input that was previously an unconnected pin on the MM1026 - the /Y input. This input is intended to be used with a RAM /CE signal. It controls the /CS output (pin 5) on the MM1134. See the schematic and timing diagram below:
 
 ![image](https://github.com/MouseBiteLabs/Game-Boy-MBC1-Cartridge/assets/97127539/8d95eb57-2370-415c-8ff0-402ed947fdcd)
 
 Essentially, the /CS output will follow the /Y input, *unless* VCC is below the 4.2V power-off threshold. Then, /CS will be pulled to VOUT (the combination of VCC and VBAT). Hey, this is great, because it means we can control that pesky 256K SRAM /CE pin *and* put it in a low power state when the power shuts off!
 
 *Note: If you ground the /Y input, then the MM1134 will act exactly like an MM1026.*
-
-On the gbhwdb, there are only a few cartridge PCBs that use an MM1134 (the BA6735 equivalent, specifically) - DMG-DECN-20 and DMG-DGCU-10 - but these boards use 64K of SRAM, so this extra /Y pin goes unused. 
 
 ### Open Collector Requirements on CPU /RESET Input
 
@@ -125,7 +116,7 @@ In conclusion, any output connected to the /RESET net on the Game Boy *must* be 
 
 ## Battery Management Implementation Options
 
-Ok, with the background taken care of, I'll talk about how my MBC1 board manages all of this, and the different compatibility options. If you reference the schematic above, you will see three options for games that use SRAM:
+Ok, with the background taken care of, I'll talk about how my MBC5 board manages all of this, and the different compatibility options. If you reference the schematic above, you will see three options for games that use SRAM:
 1) MM1134 ("Group A" components)
 2) MM1026 ("Group A" and "Group C" components)
 3) No donor MM chip ("Group B" components)
@@ -138,7 +129,7 @@ For reference again, here is a pinout diagram of the MM1026 and MM1134.
 
 And here is the section of the schematic for using one of these chips ("Group A" components).
 
-![image](https://github.com/MouseBiteLabs/Game-Boy-MBC1-Cartridge/assets/97127539/28d35d98-ce20-4379-8131-2e3df5720db8)
+![image](https://github.com/MouseBiteLabs/Game-Boy-MBC5-Cartridge/assets/97127539/02d25858-d04c-4bd3-897d-0e26f476c40c)
 
 #### Creating the Battery-Backed Power Supply
 
@@ -146,22 +137,22 @@ The VOUT pin is a combination of the VCC and VBAT pins. VCC is connected to the 
 
 #### Reset Pin Management
 
-Because anything connected to the /RESET input pin on the cart edge must be open collector, the open collector output of the MM chip, pin 2, is connected to the /RESET cart edge pin (pin 30). The MBC's /RESET input, pin 10, is connected to the driven CS output of the MM chip, pin 3.
+Because anything connected to the /RESET input pin on the cart edge must be open collector, the open collector output of the MM chip, pin 2, is connected to the /RESET cart edge pin (pin 30). The MBC's /RESET input, pin 13, is connected to the driven CS output of the MM chip, pin 3.
 
 #### Controlling the SRAM /CE Pin (MM1134)
 
-The RAM_/CS output of the MBC1 is connected to the /Y input (pin 7) of the MM1134, and if SJ3 is bridged to connect it to RAM_/CS_G (as it should be when using an MM1134), the /CS output (pin 5) will be connected to the SRAM /CE input. As explained earlier, the state of the /CS output of the MM1134 is the same as the /Y input, unless VCC is below 4.2V, in which case the /CS output is pulled up to the VOUT voltage to satisfy low-current data retention requirements of the SRAM.
+The RAM_/CS output of the MBC5 is connected to the /Y input (pin 7) of the MM1134, and if SJ3 is bridged to connect it to RAM_/CS_G (as it should be when using an MM1134), the /CS output (pin 5) will be connected to the SRAM /CE input. As explained earlier, the state of the /CS output of the MM1134 is the same as the /Y input, unless VCC is below 4.2V, in which case the /CS output is pulled up to the VOUT voltage to satisfy low-current data retention requirements of the SRAM.
 
 #### Controlling the SRAM /CE Pin (MM1026)
 
-Because the MM1026 does not have the gated /CS output functionality, and the MBC1 is not powered by the battery on my cart design, we need to add the function back with some external components, which I have labelled as "Group C" components in the schematic.
+Because the MM1026 does not have the gated /CS output functionality, and the MBC5 is not powered by the battery on my cart design, we need to add the function back with some external components, which I have labelled as "Group C" components in the schematic.
 
-![image](https://github.com/MouseBiteLabs/Game-Boy-MBC1-Cartridge/assets/97127539/8a6cc931-1e40-4af1-b359-2de8ab8acf11)
+![image](https://github.com/MouseBiteLabs/Game-Boy-MBC5-Cartridge/assets/97127539/191c1c0b-0448-41c6-85b2-a94e8411c637)
 
-As a reminder: RAM_/CS connects to the MBC1's RAM_/CS output pin, RAM_/CS_G connects to the SRAM's /CE input, and VCC_SRAM connects to the MM1026 VOUT pin.
+As a reminder: RAM_/CS connects to the MBC5's RAM_/CS output pin, RAM_/CS_G connects to the SRAM's /CE input, and VCC_SRAM connects to the MM1026 VOUT pin.
 
 - When the CS output is driven low (when VCC is below 4.2V), conduction between the drain and source of Q2 will be off; the RAM_/CS_G net will be pulled up to the battery-backed voltage via R7, no matter what RAM_/CS is doing.
-- When the CS output is driven high (when VCC is above 4.2V), conduction between the drain and source of Q1 is allowed; RAM_/CS_G will follow the RAM_/CS output, which will allow the MBC1 to control the SRAM /CE input.
+- When the CS output is driven high (when VCC is above 4.2V), conduction between the drain and source of Q1 is allowed; RAM_/CS_G will follow the RAM_/CS output, which will allow the MBC5 to control the SRAM /CE input.
 
 Thus, this circuit essentially adds the MM1134's gated /CS output functionality back into the circuit.
 
@@ -169,7 +160,7 @@ Thus, this circuit essentially adds the MM1134's gated /CS output functionality 
 
 If you do not have one of these MM chips, as you can only typically get them from donor Game Boy cartridges and not all games use them, you can achieve the same results using commercially-available components. In order to do so, you need to populate "Group B" components which features the TPS3613 - a Texas Instruments chip that is almost identical to the MM1134, with a few minor differences.
 
-![image](https://github.com/MouseBiteLabs/Game-Boy-MBC1-Cartridge/assets/97127539/ecbeeedb-ec24-4204-88d6-f9e8cc8cf5c1)
+![image](https://github.com/MouseBiteLabs/Game-Boy-MBC5-Cartridge/assets/97127539/44fd110a-8cf6-4293-ba6f-ae321d27b7c0)
 
 Here is the timing diagram from the TPS3613 datasheet, showing the relations between the inputs and outputs of the chip.
 
@@ -185,8 +176,8 @@ The voltage on SENSE is determined by the voltage divider made with R9 and R10. 
 
 The /RESET and RESET outputs of the TPS3613 are push-pull. This is slightly inconvenient, because it means you cannot directly connect them to the /RST pin on the cart edge (pin 30), because as discussed earlier, any connection to this pin must be open collector. So, we just have to make it open collector (or in this case, open drain). Adding Q1, an N-channel MOSFET, achieves this. 
 
-- When voltage on the SENSE pin is above the internal 1.15V threshold, the /RESET output pin is asserted high allowing the MBC1 to function, and the RESET output pin is asserted low. This will keep Q1 off and allow /RST, pin 30 on the cart edge, to float.
-- When voltage on the SENSE pin drops below the internal 1.15V threshold, the /RESET output pin is asserted low turning off the MBC1, and the RESET output pin is asserted high. This will turn Q1 on, and pull pin 30 on the cart edge to GND. Note that the positive RESET output follows the voltage on the VDD pin, so once the 5V supply on the Game Boy depletes, Q1 will be off again, but since there will be no power to the MBC1, this doesn't make a difference.
+- When voltage on the SENSE pin is above the internal 1.15V threshold, the /RESET output pin is asserted high allowing the MBC5 to function, and the RESET output pin is asserted low. This will keep Q1 off and allow /RST, pin 30 on the cart edge, to float.
+- When voltage on the SENSE pin drops below the internal 1.15V threshold, the /RESET output pin is asserted low turning off the MBC5, and the RESET output pin is asserted high. This will turn Q1 on, and pull pin 30 on the cart edge to GND. Note that the positive RESET output follows the voltage on the VDD pin, so once the 5V supply on the Game Boy depletes, Q1 will be off again, but since there will be no power to the MBC5, this doesn't make a difference.
 
 #### Controlling the SRAM /CE Pin
 
@@ -198,13 +189,13 @@ You can get a very rough estimate of battery life by measuring the voltage in mi
 
 *Fun fact: you can measure this voltage using TP2 and TP3 on the back of the board as your multimeter probe points.*
 
-Then, find the milliamp-hour rating of your selected battery (preferrably from a datasheet). For example, a Renata CR2025 battery is rated for 165 mAh. Take this number and divide by the milliamps calculated above, to get a rough estimate of the number of hours the battery can supply when the console is turned off (when it is on, the Game Boy powers the cart so the battery is unused). Divide by 24 and then 365 (or just divide by 8760) and you will get a number of years. 
+Then, find the milliamp-hour rating of your selected battery (preferrably from a datasheet). For example, a Renata CR2032 battery is rated for 225 mAh. Take this number and divide by the milliamps calculated above, to get a rough estimate of the number of hours the battery can supply when the console is turned off (when it is on, the Game Boy powers the cart so the battery is unused). Divide by 24 and then 365 (or just divide by 8760) and you will get a number of years.
 
 So for an overall equation to determine the very approximate number of years the battery will survive:
 
 Years = Resistance of R1 (ohms) * Battery capacity (mAh) / Voltage (mV) / 8760 
 
-For an example: an MBC1 cartridge where R1 is 10 kΩ (or 10000 Ω), using a CR2025 rated for 165 mAh, and a voltage of 10 mV measured across the terminals of R1, yields 10000 * 165 / 10 / 8760 = 18.84 years of battery survival. This number can be different due to changing environmental conditions, self-discharge of the battery, and also actual capacity of the battery - discharging a battery at very small currents will increase its apparent capacity, and as the voltage decreases, the current required for data retention decreases as well.
+For an example: an MBC5 cartridge where R1 is 10 kΩ (or 10000 Ω), using a CR2025 rated for 165 mAh, and a voltage of 10 mV measured across the terminals of R1, yields 10000 * 165 / 10 / 8760 = 18.84 years of battery survival. This number can be different due to changing environmental conditions, self-discharge of the battery, and also actual capacity of the battery - discharging a battery at very small currents will increase its apparent capacity, and as the voltage decreases, the current required for data retention decreases as well.
 
 Just backup your save data within a decade of making the cart and you'll be fine.
 
@@ -212,10 +203,10 @@ Just backup your save data within a decade of making the cart and you'll be fine
 
 I added spots for a few extra capacitors, in the event some compatibility issues arise. By default, you should ignore these components, as they were not present in most cartridges. If I find instances where they are needed, I will note them in this repo. For now, assume they are unnecessary.
 
-![image](https://github.com/MouseBiteLabs/Game-Boy-MBC1-Cartridge/assets/97127539/8e5285e4-f13a-4778-973c-cb9ec47e1660)
+![image](https://github.com/MouseBiteLabs/Game-Boy-MBC5-Cartridge/assets/97127539/6b0be647-af29-420b-b825-94c0fd3309e6)
 
-1) C9 is a capacitor connected nearby the MBC1's /WR pin to GND. These were populated on some cartridges, and have a value of approximately 1 nF (0.001 uF).
-2) C10 is a capacitor connected nearby the MBC1's /RESET pin to GND. A spot for this capacitor was included on some MBC1 carts, but I cannot locate an instance of it actually being used when looking through the gbhwdb. I don't actually know what value this capacitor would need to be, so I am guessing 1 nF.
+1) C9 is a capacitor connected nearby the MBC5's /WR pin to GND. These were populated on some MBC1 cartridges, and have a value of approximately 1 nF (0.001 uF).
+2) C10 is a capacitor connected nearby the MBC5's /RESET pin to GND. A spot for this capacitor was included on some MBC1 carts, but I cannot locate an instance of it actually being used when looking through the gbhwdb. I don't actually know what value this capacitor would need to be, so I am guessing 1 nF.
 3) C11 is a capacitor that I have added that was not used on any original Game Boy board. It connects to the SRAM's /CE pin, bypassing to GND. I have added this in the event incompatibilities arise with newer SRAM chips that have much faster speeds than older SRAM chips. This was a problem I encountered on some of my NES cartridges, so this is here just in case.
 
 ## Resources
@@ -223,7 +214,6 @@ I added spots for a few extra capacitors, in the event some compatibility issues
 - <a href="http://www.devrs.com/gb/files/hardware.html">Jeff Frohwein's GameBoy Tech Page</a>
 - <a href="https://gbhwdb.gekkio.fi/">Game Boy Hardware Database</a>
 - <a href="https://catskull.net/gb-rom-database/">Nintendo Gameboy Game List</a>
-- <a href="https://wiki.tauwasser.eu/view/MBC1">Tauwasser's Wiki</a>
 - <a href="https://www.gbxcart.com/">insideGadgets discord server for GBxCart RW compatibility requirements</a>
 - <a href="https://www.alldatasheet.com/datasheet-pdf/pdf/99104/MITSUBISHI/MM1026.html">System Reset IC Datasheet</a>
 - <a href="https://www.ti.com/lit/ds/symlink/tps3613-01.pdf?HQS=dis-mous-null-mousermode-dsf-pf-null-wwe&ts=1698238885366&ref_url=https%253A%252F%252Feu.mouser.com%252F">TPS3613 Datasheet</a>
