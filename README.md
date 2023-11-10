@@ -2,7 +2,7 @@
 
 This is my design of a flashable MBC5-based cartridge for the Game Boy. The MBC5 mapper greatly augments the memory access of the Game Boy for larger games. Most of the games that came out in the last years of the Game Boy and Game Boy Color used the MBC5 mapper.
 
-This circuit board should cover most, if not all, MBC5 games. The features are as follows:
+This circuit board should cover most MBC5 games. The features are as follows:
 
 - Able to make games up to 32 Mbit in size, that use up to 1024 Kb of RAM
 - Compatibility with all four of the popular Game Boy battery management ICs - MM1026, MM1134, BA6129, and BA6735
@@ -15,7 +15,7 @@ All gerbers and source files can be found in this repo, as this project is fully
 
 ## Important Things Before You Start
 
-1) To make this game, you need to have an original Game Boy game that uses an MBC5 mapper chip. <a href="https://catskull.net/gb-rom-database/">You can find a list of games and their mappers here</a>. Use the search function.
+1) To use this board, you need to have an original Game Boy game that uses an MBC5 mapper chip. <a href="https://catskull.net/gb-rom-database/">You can find a list of games and their mappers here</a>. Use the search function.
 2) You will need to remove the MBC5 from your donor cartridge for use on this board. This will require a hot air rework station or a hot plate. There's a list below of other parts you can re-use from the donor cartridge.
 3) When soldering parts on, it's a good idea to put kapton tape or otherwise cover the bottom cartridge edge. You do not want to get solder on the cartridge contacts.
 4) I am not responsible for any damage you do to your self or your property. I do not guarantee design compatibility. You may encounter issues with certain games! Attempt this project at your own risk.
