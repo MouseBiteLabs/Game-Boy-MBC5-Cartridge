@@ -4,21 +4,24 @@ This is my design of a flashable MBC5-based cartridge for the Game Boy. The MBC5
 
 This circuit board should cover most, if not all, MBC5 games. The features are as follows:
 
-- Able to make games up to 32 Mb in size, that use up to 1024 Kb of RAM
-- Compatibility with all four of the major Game Boy battery management ICs - MM1026, MM1134, BA6129, and BA6735
+- Able to make games up to 32 Mbit in size, that use up to 1024 Kb of RAM
+- Compatibility with all four of the popular Game Boy battery management ICs - MM1026, MM1134, BA6129, and BA6735
 - The option to add battery backup to the cartridge *without* the need of the original battery management ICs - perfect for MBC5 donors that didn't have batteries in them
 - Fully compatible with the <a href="https://www.gbxcart.com/">GBxCart RW</a> so you can transfer games and save files to and from the board
 
-[image of board scan]
-[image of assembled board]
+![image](https://github.com/MouseBiteLabs/Game-Boy-MBC5-Cartridge/assets/97127539/65c0fdda-ac38-4184-8f72-514c39d8c07f)
 
 All gerbers and source files can be found in this repo, as this project is fully open source. Technical documentation of the board can be found in the Technical folder.
 
-## Disclaimer
+## Important Things Before You Start
 
-I am not responsible for any damage you do to your self or your property. I do not guarantee design compatibility. You may encounter issues with certain games! Attempt this project at your own risk.
+1) To make this game, you need to have an original Game Boy game that uses an MBC5 mapper chip. <a href="https://catskull.net/gb-rom-database/">You can find a list of games and their mappers here</a>. Use the search function.
+2) You will need to remove the MBC5 from your donor cartridge for use on this board. This will require a hot air rework station or a hot plate. There's a list below of other parts you can re-use from the donor cartridge.
+3) When soldering parts on, it's a good idea to put kapton tape or otherwise cover the bottom cartridge edge. You do not want to get solder on the cartridge contacts.
+4) I am not responsible for any damage you do to your self or your property. I do not guarantee design compatibility. You may encounter issues with certain games! Attempt this project at your own risk.
+5) If you are using this board to make games other than for personal use, you must have permission from the originator to use and distribute any ROM images or other related material. You are responsible for making sure you adhere to any license requirements.
 
-If you are using this board to make games other than for personal use, **you must have permission from the originator to use and distribute any ROM images or other related material.** You are responsible for making sure you adhere to any license requirements. DO NOT use my circuit boards for profiting from stolen work - this especially includes homebrew content, ROM hacks, and using fan-made labels without permission from the originator.
+DO NOT use my circuit boards for profiting from stolen work - this especially includes homebrew content, ROM hacks, and using fan-made labels without permission from the originator. **Support original creators!**
 
 **Please note that version 1.3 is technically untested, however, the only consequential change is an additional 0.25 mm on the bottom of the board edge for better fitment, so I don't expect issues.**
 
@@ -38,7 +41,7 @@ You can use the zipped folder at any board fabricator you like. You may also buy
 
 [link]
 
-<a href="https://oshpark.com/shared_projects/">The board is also listed on OSH Park as well.</a> **Be sure to get them in 0.8mm thickness if you order from here.**
+<a href="https://oshpark.com/shared_projects/PGaR3CsL">The board is also listed on OSH Park as well.</a> **Be sure to get them in 0.8mm thickness if you order from here.**
 
 ## Required Equipment
 
@@ -67,7 +70,7 @@ These jumpers are located underneath the MBC5 chip, and labeled "64K" and "256K/
 - SJ1 and SJ2 must be soldered in the same direction.
 - The footprint of these selection pads should allow for a DPDT switch, part number CAS-220A1, to be placed on these pads instead of having to bridge the pads with solder.
 
-[image of solder jumpers]
+![image](https://github.com/MouseBiteLabs/Game-Boy-MBC5-Cartridge/assets/97127539/7f242900-f838-4d12-a51a-a679254fe769)
 
 Note that you can make games that only require 64Kb of RAM and still use a 256Kb or 1Mb SRAM chip. You still need to configure the jumpers to the 64Kb setting, though.
 
@@ -91,34 +94,43 @@ After you assemble your game, you should measure the current out of the battery.
 
 **Note: If using the replacement battery management IC in U5, you need to power up the game at least once before battery currents will make sense.**
 
-## Bill of Materials (BOM) - UPDATE
+## Bill of Materials (BOM)
 
 Your parts list will vary depending on the game you are trying to make, and what chips you have for the battery management (if any). Note that C9 - C11 footprints are only included for edge cases that may require them; you can ignore them unless you run into issues.
 
 Please carefully review the parts you need for the board you are trying to make. Do not add any parts to your build that don't appear in the column for the game you are making. This means you *cannot* populate every component on the board at the same time.
 
-| Reference Designators | Value/Part Number             | Package          | Description        | No save carts | Save carts with U4 | Save carts without U4 | Source                                           |
-| --------------------- | ----------------------------- | ---------------- | ------------------ | ------------- | ------------------ | --------------------- | ------------------------------------------------ |
-| B1                    | CR2025                        | CR2025           | Backup Battery     |               | X                  | X                     | [https://mou.sr/3PLccol](https://mou.sr/3PLccol) |
-| C1                    | 0.1uF                         | 0603             | Capacitor (MLCC)   | X             | X                  | X                     | [https://mou.sr/3ENc15O](https://mou.sr/3ENc15O) |
-| C2                    | 0.1uF                         | 0603             | Capacitor (MLCC)   | X             | X                  | X                     | [https://mou.sr/3ENc15O](https://mou.sr/3ENc15O) |
-| C3                    | 10uF                          | 0603             | Capacitor (MLCC)   |               | X                  | X                     | [https://mou.sr/3mZtSkF](https://mou.sr/3mZtSkF) |
-| C4                    | 0.1uF                         | 0603             | Capacitor (MLCC)   |               | X                  | X                     | [https://mou.sr/3ENc15O](https://mou.sr/3ENc15O) |
-| C6                    | 0.1uF                         | 0603             | Capacitor (MLCC)   |               | X                  | X                     | [https://mou.sr/3ENc15O](https://mou.sr/3ENc15O) |
-| C7                    | 0.1uF                         | 0603             | Capacitor (MLCC)   |               |                    | X                     | [https://mou.sr/3ENc15O](https://mou.sr/3ENc15O) |
-| Q1                    | Si2301CDS                     | SOT-23           | P-Channel FET      |               |                    | X                     | [https://mou.sr/3LvBdSb](https://mou.sr/3LvBdSb) |
-| Q2                    | MMBT3904                      | SOT-23           | NPN BJT            |               |                    | X                     | [https://mou.sr/3Rv7yfA](https://mou.sr/3Rv7yfA) |
-| R1                    | 10k                           | 0603             | Resistor           |               | X                  | X                     | [https://mou.sr/3riR7IH](https://mou.sr/3riR7IH) |
-| R2                    | 10k                           | 0603             | Resistor           | X             | X                  | X                     | [https://mou.sr/3riR7IH](https://mou.sr/3riR7IH) |
-| R3                    | 10k                           | 0603             | Resistor           |               |                    | X                     | [https://mou.sr/3riR7IH](https://mou.sr/3riR7IH) |
-| R4                    | 10k                           | 0603             | Resistor           |               |                    | X                     | [https://mou.sr/3riR7IH](https://mou.sr/3riR7IH) |
-| U1                    | 29F016, 29F032, 29F033        | TSOP-48, TSOP-40 | Flash EEPROM       | X             | X                  | X                     | AliExpress or eBay                               |
-| U2                    | MBC5                          | QFP-32           | MBC5 Mapper        | X             | X                  | X                     | Donor MBC5 Game Boy cartridge                    |
-| U3                    | AS6C6264, AS6C62256, AS6C1008 | SOP-28, SOP-32   | SRAM               |               | X                  | X                     | [https://mou.sr/3ZxG6jd](https://mou.sr/3ZxG6jd) |
-| U4                    | MM1134, BA6735                | SOIC-8           | Battery Management |               | X                  |                       | Donor Game Boy cartridge                         |
-| U5                    | TPS3840DL42                   | SOT-23-5         | Supervisory IC     |               |                    | X                     | [https://mou.sr/46lxKxA](https://mou.sr/46lxKxA) |
-| U6                    | LM66100DCKR                   | SC70-6           | Ideal Diode        |               |                    | X                     | [https://mou.sr/450kfSE](https://mou.sr/450kfSE) |
-| U7                    | 74AHC1G79                     | SC-74A-5         | Flip Flop          |               | If multicart       | If multicart          | https://mou.sr/3PPoGve                           |
+| Reference Designators | Value/Part Number              | Package          | Description        | No save carts | Save carts with MM1134 or BA6735 | Save carts with MM1026 or BA6129 | Save carts without donor U4 chip | Source                                           |
+| --------------------- | ------------------------------ | ---------------- | ------------------ | ------------- | -------------------------------- | -------------------------------- | -------------------------------- | ------------------------------------------------ |
+| B1                    | CR2032, CR2025, CR2016         | CR2032           | Backup Battery     |               | X                                | X                                | X                                | [https://mou.sr/3SeAzfT](https://mou.sr/3SeAzfT) |
+| C1                    | 0.1uF                          | 0603             | Capacitor (MLCC)   | X             | X                                | X                                | X                                | [https://mou.sr/3ENc15O](https://mou.sr/3ENc15O) |
+| C4                    | 0.1uF                          | 0603             | Capacitor (MLCC)   | X             | X                                | x                                |                                  | [https://mou.sr/3ENc15O](https://mou.sr/3ENc15O) |
+| C5                    | 0.1uF                          | 0603             | Capacitor (MLCC)   |               | X                                | X                                | X                                | [https://mou.sr/3ENc15O](https://mou.sr/3ENc15O) |
+| C6                    | 10uF                           | 0603             | Capacitor (MLCC)   |               | X                                | X                                | X                                | [https://mou.sr/3mZtSkF](https://mou.sr/3mZtSkF) |
+| C7                    | 0.1uF                          | 0603             | Capacitor (MLCC)   | X             | X                                | X                                | X                                | [https://mou.sr/3ENc15O](https://mou.sr/3ENc15O) |
+| C8                    | 0.1uF                          | 0603             | Capacitor (MLCC)   |               |                                  |                                  | X                                | [https://mou.sr/3ENc15O](https://mou.sr/3ENc15O) |
+| Q1                    | 2N7002                         | SOT-23           | N-Channel FET      |               |                                  |                                  | X                                | [https://mou.sr/3rgfh6J](https://mou.sr/3rgfh6J) |
+| Q2                    | 2N7002                         | SOT-23           | N-Channel FET      |               |                                  | X                                |                                  | [https://mou.sr/3rgfh6J](https://mou.sr/3rgfh6J) |
+| R1                    | 10k                            | 0603             | Resistor           |               | X                                | X                                | X                                | [https://mou.sr/3riR7IH](https://mou.sr/3riR7IH) |
+| R7                    | 10k                            | 0603             | Resistor           |               |                                  | X                                |                                  | [https://mou.sr/3riR7IH](https://mou.sr/3riR7IH) |
+| R8                    | 10k                            | 0603             | Resistor           | X             | X                                | X                                | X                                | [https://mou.sr/3riR7IH](https://mou.sr/3riR7IH) |
+| R9                    | 130k                           | 0603             | Resistor           |               |                                  |                                  | X                                | [https://mou.sr/3MjXliy](https://mou.sr/3MjXliy) |
+| R10                   | 49.9k                          | 0603             | Resistor           |               |                                  |                                  | X                                | [https://mou.sr/3Q3NRZO](https://mou.sr/3Q3NRZO) |
+| U1                    | 29F016, 29F032, 29F033         | TSOP-48, TSOP-40 | Flash EEPROM       | X             | X                                | X                                | X                                | AliExpress or eBay                               |
+| U2                    | MBC5                           | QFP-32           | MBC5 Mapper        | X             | X                                | X                                | X                                | Donor MBC5 Game Boy cartridge                    |
+| U3                    | AS6C6264, AS6C62256, AS6C1008  | SOP-28, SOP-32   | SRAM               |               | X                                | X                                | X                                | [https://mou.sr/3ZxG6jd](https://mou.sr/3ZxG6jd) |
+| U4                    | MM1026, MM1134, BA6129, BA6735 | SOIC-8           | Battery Management |               | X                                | X                                |                                  | Donor Game Boy cartridge                         |
+| U5                    | TPS3613                        | MSOP-10          | Battery Management |               |                                  |                                  | X                                | https://mou.sr/45Ir2kh                           |
+
+### Usable Donor Cartridge Parts
+
+You can use a few parts from the donor cart on the new board to save some money. Note that you will generally get better reliability with new parts as opposed to old ones. For example: I have seen failed RAM chips from donors in the past.
+
+1) **U2: MBC5** - This one is required
+2) **U3: SRAM** - You can use this part *only if* the game you're making uses the same or less amount of RAM that the donor cartridge does
+3) **U4: Battery Management IC** - Using this is probably preferred over the TPS3613 because it'll save you money and parts to put on
+
+You could probably transfer over most of the 0.1uF capacitors but they're pretty cheap anyway, so I generally just recommend buying new resistors and capacitors.
 
 ## Things to Remember
 
@@ -156,9 +168,10 @@ Please carefully review the parts you need for the board you are trying to make.
 - <a href="https://gbhwdb.gekkio.fi/">Game Boy Hardware Database</a>
 - <a href="https://catskull.net/gb-rom-database/">Nintendo Gameboy Game List</a>
 - <a href="https://www.gbxcart.com/">insideGadgets discord server for GBxCart RW compatibility requirements</a>
-- <a href="https://www.ti.com/lit/ds/symlink/lm66100.pdf?HQS=dis-dk-null-digikeymode-dsf-pf-null-wwe&ts=1694502124931&ref_url=https%253A%252F%252Fwww.ti.com%252Fgeneral%252Fdocs%252Fsuppproductinfo.tsp%253FdistId%253D10%2526gotoUrl%253Dhttps%253A%252F%252Fwww.ti.com%252Flit%252Fgpn%252Flm66100">LM66100 Datasheet</a>
+- <a href="https://github.com/lesserkuma/FlashGBX">Lesserkuma's FlashGBX software</a>
 - <a href="https://www.alldatasheet.com/datasheet-pdf/pdf/99104/MITSUBISHI/MM1026.html">System Reset IC Datasheet</a>
-- Board outline from <a href="https://tinkerer.us/projects/homebrew-gameboy-cartridge.html">Dillon Nichols's Homebrew Gameboy Cartridge project</a>
+- <a href="https://www.ti.com/lit/ds/symlink/tps3613-01.pdf?HQS=dis-mous-null-mousermode-dsf-pf-null-wwe&ts=1698238885366&ref_url=https%253A%252F%252Feu.mouser.com%252F">TPS3613 Datasheet</a>
+- Board outline modified from <a href="https://tinkerer.us/projects/homebrew-gameboy-cartridge.html">Dillon Nichols's Homebrew Gameboy Cartridge project</a>
 - Thank you to <a href="https://github.com/Gekkio">gekkio</a> for their deep Game Boy knowledge resources, and for collaboration in demystifying some of the design choices on Game Boy cartridges
 - Thanks to the awesome members of the <a href="https://moddedgameboy.club/">Modded Gameboy Club</a> for their feedback and support during the entire project development
 
