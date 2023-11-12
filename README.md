@@ -10,7 +10,7 @@ This circuit board should cover most MBC5 games. The features are as follows:
 - Fully compatible with the <a href="https://www.gbxcart.com/">GBxCart RW</a> so you can transfer games and save files to and from the board
 
 ![image](https://github.com/MouseBiteLabs/Game-Boy-MBC5-Cartridge/assets/97127539/370546d7-8c39-491a-b636-7c75260e6a6e)
-*[Image provided by <a href="https://github.com/emperadur?tab=overview&from=2023-11-01&to=2023-11-12">emperadur</a>]*
+*[Image provided by <a href="https://github.com/emperadur">emperadur</a>]*
 
 ![image](https://github.com/MouseBiteLabs/Game-Boy-MBC5-Cartridge/assets/97127539/65c0fdda-ac38-4184-8f72-514c39d8c07f)
 
