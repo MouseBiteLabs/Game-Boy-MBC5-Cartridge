@@ -4,7 +4,7 @@ This is my design of a flashable MBC5-based cartridge for the Game Boy. The MBC5
 
 This circuit board should cover most MBC5 games. The features are as follows:
 
-- Able to make games up to 32 Mbit in size, that use up to 1024 Kb of RAM
+- Able to make games up to 4 MB in size, that use up to 1 Mbit of RAM
 - Compatibility with all four of the popular Game Boy battery management ICs - MM1026, MM1134, BA6129, and BA6735
 - The option to add battery backup to the cartridge *without* the need of the original battery management ICs - perfect for MBC5 donors that didn't have batteries in them
 - Fully compatible with the <a href="https://www.gbxcart.com/">GBxCart RW</a> so you can transfer games and save files to and from the board
@@ -68,16 +68,16 @@ The board comes with five sets of jumper pads for solder bridges. SJ1, SJ2, SJ3,
 
 These jumpers are located underneath the MBC5 chip, and labeled "64K" and "256K/1M". Solder them to configure the amount of RAM your cart uses. You must configure these pads for every game you make, unless you do not need RAM. <a href="https://catskull.net/gb-rom-database/">You can find a list of games here with their respective RAM sizes.</a>
 
-- If the game you're making uses 256Kb or more of SRAM, then solder the middle pads of the two jumper sets to the right pads.
-- If the game you're making uses 64Kb of SRAM, then solder the middle pads of the two jumper sets to the left pads.
+- If the game you're making uses 256 Kbit or 1 Mbit of RAM, then solder the middle pads of the two jumper sets to the right pads.
+- If the game you're making uses 64 Kbit of RAM, then solder the middle pads of the two jumper sets to the left pads.
 - SJ1 and SJ2 must be soldered in the same direction.
 - The footprint of these selection pads should allow for a DPDT switch, part number CAS-220A1, to be placed on these pads instead of having to bridge the pads with solder.
 
 ![image](https://github.com/MouseBiteLabs/Game-Boy-MBC5-Cartridge/assets/97127539/7f242900-f838-4d12-a51a-a679254fe769)
 
-Note that you can make games that only require 64Kb of RAM and still use a 256Kb or 1Mb SRAM chip. You still need to configure the jumpers to the 64Kb setting, though.
+Note that you can make games that only require 64 Kbit of RAM and still use a 256 Kbit or 1 Mbit SRAM chip. You still need to configure the jumpers to the 64Kb setting, though.
 
-**I recommend using 64Kb or 256Kb RAM chips, unless you absolutely need 1Mb for the game you are making.**
+**I recommend using 64 Kbit or 256 Kbit RAM chips, unless you absolutely need 1 Mbit for the game you are making.**
 
 ### Using an MM1134 or BA6735 for U4 (SJ3)
 
@@ -149,8 +149,8 @@ If you want to experiment with the capacitors C9 to C11, see this info below. **
 - The footprint for the battery can fit a CR2032, CR2025, or CR2016 with solder tabs. The only difference is the mAh capacity (larger number = longer life). If you get Panasonic tabbed batteries, you may have to trim the battery tabs to make them fit on the footprint.
   - For untabbed coin cells, you can find battery retainer adapters online, <a href="https://retrogamerepairshop.com/products/hdr-game-boy-game-battery-retainer?variant=40511013290156">like this one.</a>
 - For battery management, use either U4 *or* U5 and supporting components. **Do not** use U4 and U5 simultaneously on one board. They will interfere with each other.
-- Kb is kilo**bits** and Mb is mega**bits**. Sometimes you will find game ROM and RAM sizes defined in terms of KB or kilo**bytes** and MB or mega**bytes**. You can convert Kb and Mb to KB and MB by dividing Kb or Mb by 8. For example, 256 Kb = 32 KB.
-- You only need to provide ROM and RAM chips that have at least *or greater* the size of the game you are trying to make. That means you can use a 256Kb SRAM chip for a game that only requires 64Kb!
+- Generally, ROM sizes are conveyed in terms of kilo**bytes** (KB) and mega**bytes** (KB, MB). RAM size is usually conveyed in terms of kilo**bits** or mega**bits** (Kbit, Mbit). You can convert Kbit and Mbit to KB and MB by dividing Kbit or Mbit by 8. For example, 256 Kbit = 32 KB.
+- You only need to provide ROM and RAM chips that have at least *or greater* the size of the game you are trying to make. That means you can use a 256 Kbit SRAM chip for a game that only requires 64 Kbit of RAM!
 
 ## Revision History
 
