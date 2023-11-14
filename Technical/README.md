@@ -29,8 +29,8 @@ Further sections will provide more context for some of the other MBC5 pins and t
 ## ROM and RAM
 
 The connections to the address and data pins here are mostly self-explanatory. However, the upper address pins are controlled by the MBC5.
-- A14 through A21 on the ROM chip are controlled by the RA14 to RA21 outputs from the MBC5. On my cart, the RA22 output doesn't go anywhere. This would be used for expanding the ROM space from 32 Mbit to the max size of 64 Mbit, but barely any games use this much space. The only board I could find that actually supports it is <a href="https://gbhwdb.gekkio.fi/cartridges/CGB-B82J-0/gekkio-1.html">DMG-A15-10</a>.
-- A13 to A16 on the SRAM chip are controlled by the AA13 to AA16 outputs from the MBC5. This means you can address up to a whole 1024 Kbit of SRAM! The max SRAM size wasn't used on too many games, but it does include Game Boy Wars 3 (Advance Wars series), so it felt worthy of inclusion.
+- A14 through A21 on the ROM chip are controlled by the RA14 to RA21 outputs from the MBC5. On my cart, the RA22 output doesn't go anywhere. This would be used for expanding the ROM space from 4 MB (32 Mbit) to the max size of 8 MB (64 Mbit), but barely any games use this much space. The only board I could find that actually supports it is <a href="https://gbhwdb.gekkio.fi/cartridges/CGB-B82J-0/gekkio-1.html">DMG-A15-10</a>.
+- A13 to A16 on the SRAM chip are controlled by the AA13 to AA16 outputs from the MBC5. This means you can address up to a whole 1 Mbit of RAM! The max SRAM size wasn't used on too many games, but it does include Game Boy Wars 3 (Advance Wars series), so it felt worthy of inclusion.
 
 Other pins include: 
 
@@ -66,7 +66,7 @@ The big differences are the number of address pins and the number of chip enable
 
 For 64K, /CE needs to be at VCC, *or* CE2 needs to be at GND for the current to be minimized. For 256K, /CE needs to be at VCC, full stop (in this case, VCC is whatever voltage appears on the SRAM's VCC pin, so when power is off that's the battery voltage). That's not super convenient if the power is off - something needs to make the /CE pin go to VCC, which means whatever that something is better not be pulling a lot of current, lest we lower our battery life.
 
-*If you use a 256 Kbit SRAM chip, but solder the jumpers on my board for 64 Kbit, the CE2 pin on the 64 Kbit RAM chip will be continuously enabled by setting it high. And for 1024 Kbit SRAM, there's an extra four pins to expand the memory space, and it also restores the CE2 pin that the 64 Kbit SRAM has. For easy implementation, my boards still only use the /CE pin for data access and retention, and keeps the new CE2 pin continuously enabled.*
+*If you use a 256 Kbit SRAM chip, but solder the jumpers on my board for 64 Kbit, the CE2 pin on the 64 Kbit RAM chip will be continuously enabled by setting it high. And for 1 Mbit SRAM, there's an extra four pins to expand the memory space, and it also restores the CE2 pin that the 64 Kbit SRAM has. For easy implementation, my boards still only use the /CE pin for data access and retention, and keeps the new CE2 pin continuously enabled.*
 
 Games that have 64K SRAM can use the MBC5 for controlling the /CE pin for data access, and U4 (the MM chips) for keeping CE2 at GND when power was off. But for 256K SRAM, that CE2 pin isn't available anymore. As an example - for MBC1 games, if a cartridge had an MM1026 chip for battery management, the MBC1 was powered via of the battery as well, and had internal logic to keep /CE logic high when disabled. The MM1026 has a /CE output as well that will pull the output up to the battery voltage, however it *does not* have a way to allow the /CE pin to be accessed during normal gameplay. So the MBC1 needs to take care of both functions, but since it's powered from the battery when power is off, that means the battery life would be impacted. 
 
