@@ -12,7 +12,7 @@ This circuit board should cover most MBC5 games. The features are as follows:
 ![image](https://github.com/MouseBiteLabs/Game-Boy-MBC5-Cartridge/assets/97127539/370546d7-8c39-491a-b636-7c75260e6a6e)
 *[Image provided by <a href="https://github.com/emperadur">emperadur</a>]*
 
-![image](https://github.com/MouseBiteLabs/Game-Boy-MBC5-Cartridge/assets/97127539/65c0fdda-ac38-4184-8f72-514c39d8c07f)
+![boardscan2](https://github.com/MouseBiteLabs/Game-Boy-MBC5-Cartridge/assets/97127539/2ad9d0a9-e5af-4413-b95e-923c06f8f680)
 
 All gerbers and source files can be found in this repo, as this project is fully open source. Technical documentation of the board can be found in the Technical folder.
 
