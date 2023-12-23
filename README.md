@@ -1,5 +1,7 @@
 # Game Boy MBC5 Cartridge
 
+**Note: v1.4 has been ordered but is considered untested.**
+
 This is my design of a flashable MBC5-based cartridge for the Game Boy. The MBC5 mapper greatly augments the memory access of the Game Boy for larger games. Most of the games that came out in the last years of the Game Boy and Game Boy Color used the MBC5 mapper.
 
 This circuit board should cover most MBC5 games. The features are as follows:
