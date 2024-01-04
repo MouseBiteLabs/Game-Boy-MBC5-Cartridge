@@ -1,7 +1,5 @@
 # Game Boy MBC5 Cartridge
 
-**Note: v1.4 has been ordered but is considered untested.**
-
 This is my design of a flashable MBC5-based cartridge for the Game Boy. The MBC5 mapper greatly augments the memory access of the Game Boy for larger games. Most of the games that came out in the last years of the Game Boy and Game Boy Color used the MBC5 mapper.
 
 This circuit board should cover most MBC5 games. The features are as follows:
@@ -27,8 +25,6 @@ All gerbers and source files can be found in this repo, as this project is fully
 5) If you are using this board to make games other than for personal use, you must have permission from the originator to use and distribute any ROM images or other related material. You are responsible for making sure you adhere to any license requirements.
 
 DO NOT use my circuit boards for profiting from stolen work - this especially includes homebrew content, ROM hacks, and using fan-made labels without permission from the originator. **Support original creators!**
-
-**Please note that version 1.3 is technically untested, however, the only consequential change is an additional 0.25 mm on the bottom of the board edge for better fitment, so I don't expect issues.**
 
 ## Board Characteristics and Order Information
 
@@ -178,12 +174,12 @@ If you want to experiment with the capacitors C9 to C11, see this info below. **
 
 ## Revision History
 
-### v1.4 (IN PROGRESS)
+### v1.4
 - Reduced cart edge by 0.1 mm for better fitment
 - Adjusted battery placement to support more battery holders
 - Added tabs on the board edges to allow the circuit board to fit better in aftermarket cartridge shells
 
-### v1.3 (FOR SALE)
+### v1.3
 - Extended cart edge down by 0.25 mm for better fitment
 - Added OSHW logo and "SUPPORT ORIGINAL CREATORS!"
 
