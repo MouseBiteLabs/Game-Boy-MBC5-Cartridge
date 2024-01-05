@@ -9,8 +9,7 @@ This circuit board should cover most MBC5 games. The features are as follows:
 - The option to add battery backup to the cartridge *without* the need of the original battery management ICs - perfect for MBC5 donors that didn't have batteries in them
 - Fully compatible with the <a href="https://www.gbxcart.com/">GBxCart RW</a> so you can transfer games and save files to and from the board
 
-![image](https://github.com/MouseBiteLabs/Game-Boy-MBC5-Cartridge/assets/97127539/370546d7-8c39-491a-b636-7c75260e6a6e)
-*[Image provided by <a href="https://github.com/emperadur">emperadur</a>]*
+![assemblepic](https://github.com/MouseBiteLabs/Game-Boy-MBC5-Cartridge/assets/97127539/953b376a-4eeb-4a1c-9449-4dc011ae7a40)
 
 ![boardscan3](https://github.com/MouseBiteLabs/Game-Boy-MBC5-Cartridge/assets/97127539/86953b12-cb63-4fe7-878b-eedf60f86023)
 
